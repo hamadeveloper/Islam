@@ -1,0 +1,523 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەرنامەی قورئان خوێندن لەگەڵ سەوت</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a5e37 0%, #0d8b4e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            background: linear-gradient(90deg, #2c6f49 0%, #3a9367 100%);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .surah-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        
+        .content {
+            padding: 30px;
+            color: #333;
+        }
+        
+        .page-info {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 20px;
+            color: #2c6f49;
+            font-weight: bold;
+        }
+        
+        .ayah-container {
+            background-color: #f8f6e9;
+            border: 1px solid #e5e2cc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .ayah {
+            font-size: 28px;
+            line-height: 1.9;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-family: 'Scheherazade New', 'Traditional Arabic', serif;
+        }
+        
+        .translation {
+            font-size: 16px;
+            text-align: center;
+            color: #555;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(90deg, #2c6f49 0%, #3a9367 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .play-btn {
+            background: linear-gradient(90deg, #1d8a5a 0%, #26c281 100%);
+            padding: 16px 32px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2c6f49 0%, #3a9367 100%);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .mic-status {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 16px;
+            color: #2c6f49;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            background-color: #f1f8e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #33691e;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f1f1f1;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .surah-info {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 16px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .ayah {
+                font-size: 24px;
+            }
+            
+            button {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+            
+            .play-btn {
+                padding: 14px 24px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>بەرنامەی قورئان خوێندن لەگەڵ سەوت</h1>
+            <div class="surah-info">
+                <span id="surah-name">سوورەتی فاتحە</span>
+                <span>|</span>
+                <span>پەڕە: <span id="current-page">1</span> لە <span id="total-pages">604</span></span>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="instructions">
+                <p>🔊 دەستبکە بە قسەکردن بە دەنگی بەرز بۆ گۆڕینی ئایەتەکان. وەکو: "بڕۆ پێشوو"، "بڕۆ دواتر"، "وەستا"</p>
+            </div>
+            
+            <div class="page-info">
+                <span id="current-ayah">ئایەتی ١</span>
+            </div>
+            
+            <div class="ayah-container">
+                <div class="ayah" id="ayah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <div class="translation" id="translation-text">بە ناوی خوای میهرەبانی بەبەزەیی</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="mic-status" id="mic-status">
+                مایکرۆفۆن: ئامادە نیە
+            </div>
+            
+            <div class="controls">
+                <button id="prev-btn">
+                    <span>پەڕەی پێشوو</span>
+                </button>
+                <button id="listen-btn">
+                    <span>دەستپێکردنی گوێگرتن</span>
+                </button>
+                <button id="next-btn">
+                    <span>پەڕەی دواتر</span>
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            بەرنامەی قورئان خوێندن - درووستکراوە بۆ ئاسانی خوێندنەوەی قورئانی پیرۆز
+        </footer>
+    </div>
+
+    <script>
+        // داتای نموونەیی
+        const quranData = [
+            {
+                page: 1,
+                surah: "فاتحە",
+                ayahs: [
+                    {
+                        number: 1,
+                        text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+                        translation: "بە ناوی خوای میهرەبانی بەبەزەیی"
+                    },
+                    {
+                        number: 2,
+                        text: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+                        translation: "سوپاس بۆ خوای پهروهردگاری جیهانیان"
+                    },
+                    {
+                        number: 3,
+                        text: "الرَّحْمَٰنِ الرَّحِيمِ",
+                        translation: "ئەو زاتەی میهرەبان و بەبەزەیە"
+                    },
+                    {
+                        number: 4,
+                        text: "مَالِكِ يَوْمِ الدِّينِ",
+                        translation: "خاوەنی ڕۆژی پاداشتە"
+                    },
+                    {
+                        number: 5,
+                        text: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+                        translation: "تەنها تۆ دەپەرستین و تەنها لە تۆ یارمەتی دەخوازین"
+                    },
+                    {
+                        number: 6,
+                        text: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+                        translation: "ڕێنمووییمان بکە بۆ ڕێی ڕاست"
+                    },
+                    {
+                        number: 7,
+                        text: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+                        translation: "ڕێی ئەوانەی نازو نیعمەتت پێ بهخشیوونە، نەک ڕێی ئەوانەی توڕە بوویت لێیان و نە ڕێی گومڕاوەکان"
+                    }
+                ]
+            },
+            {
+                page: 2,
+                surah: "بقەرە",
+                ayahs: [
+                    {
+                        number: 1,
+                        text: "الم",
+                        translation: "ئەلف، لام، میم"
+                    },
+                    {
+                        number: 2,
+                        text: "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِلْمُتَّقِينَ",
+                        translation: "ئەم قورئانە بێگومان ڕێنموویی پارێزکارانە"
+                    },
+                    {
+                        number: 3,
+                        text: "الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَахُمْ يُنْفِقُونَ",
+                        translation: "ئەوانەی باوەڕ دەکەن بە غەیب و نوێژەکانیان بەچاکی ئەنجام دەدەن و لەو ڕزق و ڕۆزیەی پێمانداوون بەخشش دەکەن"
+                    }
+                ]
+            }
+        ];
+
+        // گۆڕاکەکانی بەرنامەکە
+        let currentPage = 1;
+        let currentAyah = 0;
+        let recognition = null;
+        let isListening = false;
+        
+        // پەیوەندیکردن بە ئەلێمێنتەکان
+        const surahNameElement = document.getElementById('surah-name');
+        const currentPageElement = document.getElementById('current-page');
+        const currentAyahElement = document.getElementById('current-ayah');
+        const ayahTextElement = document.getElementById('ayah-text');
+        const translationTextElement = document.getElementById('translation-text');
+        const progressBarElement = document.getElementById('progress-bar');
+        const micStatusElement = document.getElementById('mic-status');
+        const listenBtn = document.getElementById('listen-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        // فەرمانە سەرەکییەکانی بەرنامەکە
+        function loadPage(pageNumber) {
+            const pageData = quranData.find(page => page.page === pageNumber);
+            
+            if (!pageData) {
+                alert('پەڕەکە نەدۆزرایەوە!');
+                return;
+            }
+            
+            currentPage = pageNumber;
+            currentAyah = 0;
+            
+            // نوێکردنەوەی نیشاندەرەکان
+            surahNameElement.textContent = `سوورەتی ${pageData.surah}`;
+            currentPageElement.textContent = currentPage;
+            
+            // بارکردنی یەکەم ئایەت
+            loadAyah(0);
+        }
+        
+        function loadAyah(ayahIndex) {
+            const pageData = quranData.find(page => page.page === currentPage);
+            
+            if (!pageData || ayahIndex >= pageData.ayahs.length) {
+                // ئەگەر ئایەتەکە تەواو بوو، بچۆ بۆ پەڕەی دواتر
+                if (currentPage < quranData.length) {
+                    loadPage(currentPage + 1);
+                } else {
+                    alert('کۆتایی قورئان هات!');
+                }
+                return;
+            }
+            
+            currentAyah = ayahIndex;
+            const ayah = pageData.ayahs[ayahIndex];
+            
+            // نوێکردنەوەی نیشاندەرەکان
+            currentAyahElement.textContent = `ئایەتی ${ayah.number}`;
+            ayahTextElement.textContent = ayah.text;
+            translationTextElement.textContent = ayah.translation;
+            
+            // نوێکردنەوەی هێڵی پێشکەوتن
+            const progress = ((ayahIndex + 1) / pageData.ayahs.length) * 100;
+            progressBarElement.style.width = `${progress}%`;
+        }
+        
+        function setupSpeechRecognition() {
+            // پشکنینی پشتیوانی کرۆم و سافاری
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'ku';
+                
+                recognition.onstart = function() {
+                    isListening = true;
+                    micStatusElement.textContent = 'مایکرۆفۆن: چالاکە';
+                    micStatusElement.style.color = '#2c6f49';
+                    listenBtn.querySelector('span').textContent = 'وەستانی گوێگرتن';
+                };
+                
+                recognition.onresult = function(event) {
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    
+                    // لێکدانەوەی فەرمانەکان
+                    if (finalTranscript) {
+                        processVoiceCommand(finalTranscript);
+                    }
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('هەڵە لە ناسینەکی قسە', event.error);
+                    micStatusElement.textContent = `هەڵە: ${event.error}`;
+                    micStatusElement.style.color = 'red';
+                };
+                
+                recognition.onend = function() {
+                    isListening = false;
+                    micStatusElement.textContent = 'مایکرۆفۆن: ناچالاکە';
+                    micStatusElement.style.color = '#666';
+                    listenBtn.querySelector('span').textContent = 'دەستپێکردنی گوێگرتن';
+                };
+                
+            } else {
+                alert('وێبگەڕەکەت پشتیوانی ناسینەکی قسە ناکات. تکایە کرۆم یان سافاری بەکاربهێنە.');
+            }
+        }
+        
+        function processVoiceCommand(command) {
+            command = command.trim().toLowerCase();
+            
+            if (command.includes('بڕۆ پێشوو') || command.includes('پێشوو') || command.includes('پاش')) {
+                if (currentAyah > 0) {
+                    loadAyah(currentAyah - 1);
+                } else if (currentPage > 1) {
+                    loadPage(currentPage - 1);
+                }
+            } 
+            else if (command.includes('بڕۆ دواتر') || command.includes('دواتر') || command.includes('بڕۆ')) {
+                const pageData = quranData.find(page => page.page === currentPage);
+                if (currentAyah < pageData.ayahs.length - 1) {
+                    loadAyah(currentAyah + 1);
+                } else if (currentPage < quranData.length) {
+                    loadPage(currentPage + 1);
+                }
+            }
+            else if (command.includes('وەستا') || command.includes('وەستان')) {
+                stopListening();
+            }
+            else if (command.includes('دەستپێکردن') || command.includes('دەستپێکە')) {
+                startListening();
+            }
+        }
+        
+        function startListening() {
+            if (recognition) {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error('هەڵە لە دەستپێکردنی گوێگرتن', error);
+                }
+            }
+        }
+        
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+        }
+        
+        // پەیوەندیکردن بە فەرمانەکانی بەرنامەکە
+        listenBtn.addEventListener('click', () => {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentAyah > 0) {
+                loadAyah(currentAyah - 1);
+            } else if (currentPage > 1) {
+                loadPage(currentPage - 1);
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            const pageData = quranData.find(page => page.page === currentPage);
+            if (currentAyah < pageData.ayahs.length - 1) {
+                loadAyah(currentAyah + 1);
+            } else if (currentPage < quranData.length) {
+                loadPage(currentPage + 1);
+            }
+        });
+        
+        // دەستپێکردنی بەرنامەکە
+        setupSpeechRecognition();
+        loadPage(1);
+    </script>
+</body>
+</html>
